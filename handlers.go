@@ -8,7 +8,7 @@ import (
 )
 
 // Map connection to Mongo address
-type LinkShortnerAPI struct {
+type LinkShortenerAPI struct {
   myconnection *MongoConnection
 }
 
@@ -24,15 +24,15 @@ type APIResponse struct {
 }
 
 // Create new API object, connected to Mongo
-func NewUrlLinkShortenerAPI() *LinkShortnerAPI {
-  LS := &LinkShortnerAPI {
+func NewUrlLinkShortenerAPI() *LinkShortenerAPI {
+  LS := &LinkShortenerAPI {
     myconnection: NEWDBConnection(),
   }
   return LS
 }
 
 // Provide content for root
-func (Ls *LinkShortnerAPI) UrlRoot(w hhtp.ResponseWriter, r *http.Request) {
+func (Ls *LinkShortenerAPI) UrlRoot(w hhtp.ResponseWriter, r *http.Request) {
   fmt.Fprint(w, "Welcome to Ali's url shortener API, built in go! \n"+
               "Do a Get request with the short Link to get the long Link \n"+
               "Do a POST request with long Link to get a short Link \n"))
@@ -40,7 +40,7 @@ func (Ls *LinkShortnerAPI) UrlRoot(w hhtp.ResponseWriter, r *http.Request) {
 
 
 // Create new url object
-func (Ls *LinkShortnerAPI) UrlCreate(w http.ResponseWriter, r *http.Request) {
+func (Ls *LinkShortenerAPI) UrlCreate(w http.ResponseWriter, r *http.Request) {
   reqBodyStruct := new(UrlMapping)
   responseEncoder := json.NewEncoder(w)
   if err := json.NewDecoder(r.Body).Decode(&reqBodyStruct); err != nil {
@@ -61,7 +61,7 @@ func (Ls *LinkShortnerAPI) UrlCreate(w http.ResponseWriter, r *http.Request) {
   responseEncoder.Encode(&APIResponse{StatusMessage: "OK"})
 }
 
-func (Ls *LinkShortnerAPI) UrlShow(w http.ResponseWriter, r *http.Request) {
+func (Ls *LinkShortenerAPI) UrlShow(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
   sUrl := vars["shorturl"]
   if len(sUrl) > 0 {

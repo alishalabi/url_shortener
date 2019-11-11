@@ -15,7 +15,7 @@ type Route struct {
 type Routes []Route
 
 // Populate that slice with the routes and urls we want
-func CreateRoutes(LS *LinkShortnerAPI) Routes {
+func CreateRoutes(LS *LinkShortenerAPI) Routes {
   return Routes{
     Route {
       "UrlRoot",
