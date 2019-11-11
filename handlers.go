@@ -26,16 +26,16 @@ type APIResponse struct {
 // Create new API object, connected to Mongo
 func NewUrlLinkShortenerAPI() *LinkShortenerAPI {
   LS := &LinkShortenerAPI {
-    myconnection: NEWDBConnection(),
+    myconnection: NewDBConnection(),
   }
   return LS
 }
 
 // Provide content for root
-func (Ls *LinkShortenerAPI) UrlRoot(w hhtp.ResponseWriter, r *http.Request) {
+func (Ls *LinkShortenerAPI) UrlRoot(w http.ResponseWriter, r *http.Request) {
   fmt.Fprint(w, "Welcome to Ali's url shortener API, built in go! \n"+
               "Do a Get request with the short Link to get the long Link \n"+
-              "Do a POST request with long Link to get a short Link \n"))
+              "Do a POST request with long Link to get a short Link \n")
 }
 
 

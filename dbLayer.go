@@ -19,7 +19,7 @@ type MongoConnection struct {
   originalSession *mgo.Session
 }
 
-func NEWDBConnection() (conn *MongoConnection) {
+func NewDBConnection() (conn *MongoConnection) {
   conn = new(MongoConnection)
   conn.createLocalConnection()
   return
@@ -74,7 +74,7 @@ func (c *MongoConnection) FindshortUrl(longurl string) (sUrl string, err error) 
 
 func (c *MongoConnection) FindlongUrl(shortUrl string) (sUrl string, err error) {
   // Create empty document struct
-  result := mongoDocument()
+  result := mongoDocument{}
   // Get copy of the original session and a collection
   session, urlCollection, err := c.getSessionAndCollection()
   if err == nil {
