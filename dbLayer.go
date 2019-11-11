@@ -103,7 +103,7 @@ func (c *MongoConnection) AddUrls(longUrl string, shortUrl string) (err error) {
     )
     if err != nil {
       // Check: see if there is an error due to duplicate shorturl
-      if mgo.isDup(err) {
+      if mgo.IsDup(err) {
         err = errors.New("That shorturl already exists")
       }
     }
