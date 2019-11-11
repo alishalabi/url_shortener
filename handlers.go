@@ -14,7 +14,7 @@ type LinkShortnerAPI struct {
 
 // Create mapping struct, containing shorturl & longurl (returnable in json)
 type UrlMapping struct {
-  ShortURL string `json:shorturl`
+  ShortUrl string `json:shorturl`
   LongUrl string `json:longurl`
 }
 
@@ -41,5 +41,36 @@ func (Ls *LinkShortnerAPI) UrlRoot(w hhtp.ResponseWriter, r *http.Request) {
 
 // Create new url object
 func (Ls *LinkShortnerAPI) UrlCreate(w http.ResponseWriter, r *http.Request) {
-  
+  reqBodyStruct := new(UrlMapping)
+  responseEncoder := json.NewEncoder(w)
+  if err := json.NewDecoder(r.Body).Decode(&reqBodyStruct); err != nil {
+    w.WriteHeader(http.StatusBadRequest)
+    if err := responseEncoder.Encode(&APIResponse{StatusMessage: err.Error()}); err!= nil {
+      fmt.Fprintf(w, "Error %s occured while trying to add the url \n", err.Error())
+    }
+    return
+  }
+  err := Ls.myconnection.AddUrls(reqBodyStruct.LongUrl, reqBodyStruct.ShortUrl)
+  if err != nil {
+    w.WriteHeader(http.StatusConflict)
+    if err := responseEncoder.Encode(&APIResponse{StatusMessage: err.Error()}); err != nil {
+      fmt.Fprintf(w, "Error %s occured while trying to add the url \n", err.Error())
+    }
+    return
+  }
+  responseEncoder.Encode(&APIResponse{StatusMessage: "OK"})
+}
+
+func (Ls *LinkShortnerAPI) UrlShow(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  sUrl := vars["shorturl"]
+  if len(sUrl) > 0 {
+    lUrl, err := Ls.myconnection.FindlongUrl(sUrl)
+    if err != nil {
+      fmt.Fprint(w, "Could not find saved long url that corresponds to the short url %s \n", sUrl)
+      return
+    }
+
+    http.Redirect(w, r, lUrl, http.StatusFound)
+  }
 }
